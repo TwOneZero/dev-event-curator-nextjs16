@@ -7,10 +7,7 @@ type BookEventProps = {
 };
 
 export default function BookEvent({ eventTitle }: BookEventProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
+  const [formData, setFormData] = useState({ email: "" });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -58,7 +55,6 @@ export default function BookEvent({ eventTitle }: BookEventProps) {
           </div>
           <h3 className="text-2xl font-bold mb-3">Booking Confirmed!</h3>
           <p className="text-light-200 leading-relaxed mb-6">
-            Thank you, <span className="text-primary font-semibold">{formData.name}</span>!
             Your registration for <span className="font-semibold">{eventTitle}</span> has been confirmed.
           </p>
           <p className="text-sm text-light-200">
@@ -69,7 +65,7 @@ export default function BookEvent({ eventTitle }: BookEventProps) {
             onClick={() => {
               setSubmitted(false);
               setIsSuccess(false);
-              setFormData({ name: "", email: "" });
+              setFormData({ email: "" });
             }}
             className="mt-8 text-primary hover:text-primary/80 font-semibold transition-colors"
           >
@@ -85,26 +81,6 @@ export default function BookEvent({ eventTitle }: BookEventProps) {
       <h3 className="text-xl font-bold mb-6">Book Your Spot</h3>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {/* Name Input */}
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="name"
-            className="text-xs text-light-200 uppercase tracking-wider font-semibold"
-          >
-            Full Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            placeholder="Enter your full name"
-            className="bg-dark-200/30 border border-dark-200 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:border-primary/50 focus:bg-dark-200/50 transition-all placeholder:text-light-200/40"
-          />
-        </div>
-
         {/* Email Input */}
         <div className="flex flex-col gap-2">
           <label
