@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const tags = JSON.parse(formData.get('tags') as string);
-    const agenda = JSON.parse(formData.get('agenda') as string);
+    const tags = JSON.parse(formData.get("tags") as string);
+    const agenda = JSON.parse(formData.get("agenda") as string);
 
     const file = formData.get("image") as File;
 

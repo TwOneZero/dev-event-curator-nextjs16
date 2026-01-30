@@ -13,13 +13,6 @@ export async function getEventBySlug(slug: string) {
             throw new Error("Event not found");
         }
 
-        // Convert MongoDB ObjectId and Dates to strings for serialization if needed,
-        // though .lean() returns POJOs, Date objects might still need serialization for client components
-        // but this is a Server Action returning to Server Component mostly, so it should be fine.
-        // However, specifically for `_id` and dates, it's safer to serialize if passing to client.
-        // For now, returning as is since we are consuming in SC or Route Handler.
-
-        // We want to return a JSON-serializable object just in case we pass it to a client component later.
         return JSON.parse(JSON.stringify(event));
 
     } catch (error) {
@@ -57,3 +50,18 @@ export async function getSimilarEventsBySlug(slug: string) {
         throw error;
     }
 }
+
+export const getAllEventsCached = async () => {
+    'use cache';
+
+    try {
+        await connectDB();
+
+        const events = await Event.find().sort({ createdAt: -1 }).lean();
+
+        return JSON.parse(JSON.stringify(events));
+    } catch (error) {
+        console.error("Error fetching all events:", error);
+        throw error;
+    }
+};
