@@ -1,7 +1,12 @@
 "use server";
 
-import { Event } from "@/database";
+import { Event, Booking } from "@/database";
 import connectDB from "@/lib/mongodb";
+import { v2 as cloudinary } from "cloudinary";
+import { revalidateTag, cacheTag } from "next/cache";
+
+// Cache tag constant for events list
+const CACHE_TAG_EVENTS = "events";
 
 export async function getEventBySlug(slug: string) {
   try {
@@ -52,6 +57,9 @@ export async function getSimilarEventsBySlug(slug: string) {
 export const getAllEventsCached = async () => {
   "use cache";
 
+  // Tag this cache for targeted invalidation
+  cacheTag(CACHE_TAG_EVENTS);
+
   try {
     await connectDB();
 
@@ -63,3 +71,59 @@ export const getAllEventsCached = async () => {
     throw error;
   }
 };
+
+export async function deleteEventBySlug(slug: string) {
+  try {
+    await connectDB();
+
+    // Find the event first to verify it exists and get the ID
+    const event = await Event.findOne({ slug }).lean();
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Cascade delete: Remove all bookings associated with this event
+    await Booking.deleteMany({ eventId: event._id });
+
+    // Delete image from Cloudinary if it exists
+    if (event.image && event.image.includes("cloudinary")) {
+      try {
+        // Extract public_id from Cloudinary URL
+        const urlParts = event.image.split("/");
+        const filename = urlParts[urlParts.length - 1];
+        const publicId = filename.split(".")[0]; // Remove file extension
+        const folder = urlParts[urlParts.length - 2]; // Get folder name
+        const fullPublicId = `${folder}/${publicId}`;
+
+        await cloudinary.uploader.destroy(fullPublicId);
+      } catch (cloudinaryError) {
+        // Log error but don't block event deletion
+        console.error(
+          "Failed to delete image from Cloudinary:",
+          cloudinaryError
+        );
+      }
+    }
+
+    // Delete the event
+    const deletedEvent = await Event.findOneAndDelete({ slug });
+
+    if (!deletedEvent) {
+      throw new Error("Event not found");
+    }
+
+    // Invalidate the events cache so the landing page shows updated data
+    try {
+      revalidateTag(CACHE_TAG_EVENTS, { expire: 0 });
+    } catch (cacheError) {
+      // Log error but don't block the deletion if cache invalidation fails
+      console.error("Failed to invalidate events cache:", cacheError);
+    }
+
+    return JSON.parse(JSON.stringify(deletedEvent));
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    throw error;
+  }
+}
