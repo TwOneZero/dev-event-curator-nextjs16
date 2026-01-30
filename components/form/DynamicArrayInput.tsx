@@ -136,7 +136,8 @@ export default function DynamicArrayInput({
 
       {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
       <p className="text-xs text-light-200/40">
-        Press Enter or click the + button to add {type === "tags" ? "a tag" : "an agenda item"}
+        Press Enter or click the + button to add{" "}
+        {type === "tags" ? "a tag" : "an agenda item"}
       </p>
     </div>
   );

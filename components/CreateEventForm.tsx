@@ -181,7 +181,9 @@ export default function CreateEventForm() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -209,11 +211,17 @@ export default function CreateEventForm() {
               />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-3">Event Created Successfully!</h3>
+          <h3 className="text-2xl font-bold mb-3">
+            Event Created Successfully!
+          </h3>
           <p className="text-light-200 leading-relaxed">
-            Your event <span className="font-semibold text-primary">{formData.title}</span> has been created.
+            Your event{" "}
+            <span className="font-semibold text-primary">{formData.title}</span>{" "}
+            has been created.
           </p>
-          <p className="text-sm text-light-200 mt-2">Redirecting to event page...</p>
+          <p className="text-sm text-light-200 mt-2">
+            Redirecting to event page...
+          </p>
         </div>
       </div>
     );

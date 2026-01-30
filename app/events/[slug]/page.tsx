@@ -1,5 +1,7 @@
-
-import { getEventBySlug, getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import {
+  getEventBySlug,
+  getSimilarEventsBySlug,
+} from "@/lib/actions/event.actions";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import BookEvent from "@/components/BookEvent";
@@ -25,7 +27,7 @@ type EventMetadata = {
  * Get event metadata with corresponding icons
  * Maps event properties to icon, alt text, and label for consistent display
  */
-const getEventMetadata = (event: any): EventMetadata[] => {
+const getEventMetadata = (event: IEvent): EventMetadata[] => {
   return [
     {
       icon: "/icons/calendar.svg",
@@ -60,7 +62,6 @@ const getEventMetadata = (event: any): EventMetadata[] => {
   ];
 };
 
-
 const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
   <div className="agenda">
     <h2>Agenda</h2>
@@ -70,16 +71,17 @@ const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
       ))}
     </ul>
   </div>
-)
+);
 
 const EventTags = ({ tags }: { tags: string[] }) => (
   <div className="flex flex-row gap-1.5 flex-wrap">
     {tags.map((tag, index) => (
-      <div className="pill" key={tag}>{tag}</div>
+      <div className="pill" key={tag}>
+        {tag}
+      </div>
     ))}
   </div>
-)
-
+);
 
 const EventDetailsPage = async ({ params }: PageProps) => {
   const { slug } = await params;
@@ -119,7 +121,9 @@ const EventDetailsPage = async ({ params }: PageProps) => {
                 />
               </div>
               <div>
-                <p className="text-xs text-light-200 uppercase tracking-wider">{item.label}</p>
+                <p className="text-xs text-light-200 uppercase tracking-wider">
+                  {item.label}
+                </p>
                 <p className="text-sm font-semibold mt-0.5">{item.value}</p>
               </div>
             </div>
@@ -148,7 +152,9 @@ const EventDetailsPage = async ({ params }: PageProps) => {
 
             <div>
               <h3 className="text-2xl font-bold mb-4">Description</h3>
-              <p className="leading-relaxed text-light-200">{event.description}</p>
+              <p className="leading-relaxed text-light-200">
+                {event.description}
+              </p>
 
               {/* Organized By Section */}
               <div className="flex items-center gap-4 mt-6 p-5 bg-dark-200/30 rounded-xl border border-dark-200">
@@ -161,7 +167,9 @@ const EventDetailsPage = async ({ params }: PageProps) => {
                   />
                 </div>
                 <div>
-                  <p className="text-xs text-light-200 uppercase tracking-wider">Organized by</p>
+                  <p className="text-xs text-light-200 uppercase tracking-wider">
+                    Organized by
+                  </p>
                   <p className="font-bold text-lg mt-1">{event.organizer}</p>
                 </div>
               </div>
@@ -180,15 +188,19 @@ const EventDetailsPage = async ({ params }: PageProps) => {
       <div className="flex w-full flex-col gap-4 pt-20 pb-20">
         <h2>Similar Events</h2>
         <div className="flex flex-wrap gap-4">
-          {similarEvents && similarEvents.length > 0 ? similarEvents.map((similarEvent: IEvent) => (
-            <div key={similarEvent.slug} className="flex-1">
-              <EventCard key={similarEvent.slug} {...similarEvent} />
-            </div>
-          )) : <p className="text-light-200">No similar events found</p>}
+          {similarEvents && similarEvents.length > 0 ? (
+            similarEvents.map((similarEvent: IEvent) => (
+              <div key={similarEvent.slug} className="flex-1">
+                <EventCard key={similarEvent.slug} {...similarEvent} />
+              </div>
+            ))
+          ) : (
+            <p className="text-light-200">No similar events found</p>
+          )}
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default EventDetailsPage;

@@ -14,8 +14,8 @@ export default function CreateEventPage() {
           Create New Event
         </h1>
         <p className="text-light-200 text-lg max-w-2xl mx-auto">
-          Share your developer event with the community. Fill in the details below to create
-          and publish your event.
+          Share your developer event with the community. Fill in the details
+          below to create and publish your event.
         </p>
       </div>
 

@@ -3,8 +3,8 @@ trigger: always_on
 ---
 
 ---
-description: Git branching workflow for feature development and upgrades
----
+
+## description: Git branching workflow for feature development and upgrades
 
 # Git Workflow Rules
 
@@ -18,18 +18,18 @@ Based on the project's git history, follow these naming patterns:
 
 - **Features**: `feat/{feature-name}` or simple descriptive names
   - Examples: `database-model`, `api-route`, `caching`
-  
 - **Implementations**: `impl-{feature-name}`
   - Example: `impl-posthog`
 
 ### Required Workflow
 
 1. **Before starting any new feature or upgrade:**
+
    ```bash
    # Ensure you're on main and it's up to date
    git checkout main
    git pull origin main
-   
+
    # Create a new feature branch
    git checkout -b {branch-name}
    ```
@@ -42,6 +42,7 @@ Based on the project's git history, follow these naming patterns:
 3. **Before merging:**
    - Ensure all changes are committed
    - Push the feature branch to remote
+
    ```bash
    git push origin {branch-name}
    ```
@@ -50,6 +51,7 @@ Based on the project's git history, follow these naming patterns:
    - Create a Pull Request from your feature branch to `main`
    - After review/approval, merge the PR
    - Or merge locally:
+
    ```bash
    git checkout main
    git merge {branch-name}
@@ -73,6 +75,7 @@ Follow the established pattern in this project:
 - `fix(scope): description` - Bug fixes
 
 ### Examples from this project:
+
 - `feat(database): MongoDB 연결 설정 및 Event/Booking 모델 추가`
 - `feat(events): implement event details, booking system, and api routes`
 - `feat(ui): enhance landing page and core components`
@@ -93,6 +96,7 @@ When implementing features or upgrades:
 ## Exception Cases
 
 The only acceptable direct commits to `main` are:
+
 - Emergency hotfixes (must be clearly justified)
 - Minor documentation updates (README typos, etc.)
 - Configuration file updates that don't affect functionality

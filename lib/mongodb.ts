@@ -5,7 +5,6 @@ import mongoose from "mongoose";
  * This prevents multiple connections in development mode due to hot reloading.
  */
 declare global {
-  // eslint-disable-next-line no-var
   var mongoose: {
     conn: mongoose.Connection | null;
     promise: Promise<mongoose.Connection> | null;

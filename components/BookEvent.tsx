@@ -55,7 +55,9 @@ export default function BookEvent({ eventTitle }: BookEventProps) {
           </div>
           <h3 className="text-2xl font-bold mb-3">Booking Confirmed!</h3>
           <p className="text-light-200 leading-relaxed mb-6">
-            Your registration for <span className="font-semibold">{eventTitle}</span> has been confirmed.
+            Your registration for{" "}
+            <span className="font-semibold">{eventTitle}</span> has been
+            confirmed.
           </p>
           <p className="text-sm text-light-200">
             A confirmation email has been sent to{" "}
@@ -107,7 +109,11 @@ export default function BookEvent({ eventTitle }: BookEventProps) {
           disabled={isSubmitting || isSuccess}
           className="bg-primary hover:bg-primary/90 text-dark-100 font-bold py-4 rounded-xl w-full transition-all hover:scale-105 transform shadow-lg hover:shadow-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
         >
-          {isSuccess ? "Thank you for booking!" : isSubmitting ? "Processing..." : "Confirm Booking"}
+          {isSuccess
+            ? "Thank you for booking!"
+            : isSubmitting
+              ? "Processing..."
+              : "Confirm Booking"}
         </button>
 
         <p className="text-xs text-light-200/60 text-center mt-2">

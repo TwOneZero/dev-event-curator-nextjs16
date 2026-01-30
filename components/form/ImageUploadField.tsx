@@ -105,8 +105,8 @@ export default function ImageUploadField({
             isDragging
               ? "border-primary bg-primary/10"
               : error
-              ? "border-red-500/50 hover:border-red-500/80"
-              : "border-dark-200 hover:border-primary/50"
+                ? "border-red-500/50 hover:border-red-500/80"
+                : "border-dark-200 hover:border-primary/50"
           }`}
         >
           <input
@@ -132,7 +132,9 @@ export default function ImageUploadField({
             </svg>
             <div className="flex flex-col gap-1">
               <p className="text-sm text-light-100 font-medium">
-                {isDragging ? "Drop your image here" : "Click to upload or drag and drop"}
+                {isDragging
+                  ? "Drop your image here"
+                  : "Click to upload or drag and drop"}
               </p>
               <p className="text-xs text-light-200/60">
                 SVG, PNG, JPG or GIF (max. 5MB)
