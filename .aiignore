@@ -1,0 +1,25 @@
+# AI Ignore file to prevent access to sensitive data
+
+# Env files
+.env.local
+.env.dev
+.env.product
+*.env
+
+
+# Version control
+.git/
+
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+
+# IDE files
+.idea/
+.vscode/
+
+# Other sensitive or unnecessary files
+*.pem
+*.key
