@@ -127,3 +127,69 @@ export async function deleteEventBySlug(slug: string) {
     throw error;
   }
 }
+
+export async function createEvent(formData: FormData) {
+  try {
+    await connectDB();
+
+    // Extract data from FormData
+    const event: Record<string, unknown> = {};
+    formData.forEach((value, key) => {
+      if (key !== "image") {
+        event[key] = value;
+      }
+    });
+
+    // Parse JSON fields
+    const tags = JSON.parse(formData.get("tags") as string);
+    const agenda = JSON.parse(formData.get("agenda") as string);
+
+    // Handle image upload
+    const file = formData.get("image") as File;
+
+    if (!file) {
+      throw new Error("Image file is required");
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    const uploadResult = await new Promise<{ secure_url: string }>(
+      (resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            { resource_type: "image", folder: "dev-curator" },
+            (error, results) => {
+              if (error) return reject(error);
+              resolve(results as { secure_url: string });
+            }
+          )
+          .end(buffer);
+      }
+    );
+
+    event.image = uploadResult.secure_url;
+
+    // Create event in database
+    const createdEvent = await Event.create({
+      ...event,
+      tags: tags,
+      agenda: agenda,
+    });
+
+    // Invalidate the events cache so the landing page shows updated data
+    try {
+      revalidateTag(CACHE_TAG_EVENTS, { expire: 0 });
+    } catch (cacheError) {
+      // Log error but don't block the creation if cache invalidation fails
+      console.error("Failed to invalidate events cache:", cacheError);
+    }
+
+    return JSON.parse(JSON.stringify(createdEvent));
+  } catch (error) {
+    console.error("Error creating event:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to create event"
+    );
+  }
+}

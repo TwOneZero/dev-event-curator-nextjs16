@@ -7,6 +7,7 @@ import TextAreaInput from "./form/TextAreaInput";
 import SelectInput from "./form/SelectInput";
 import ImageUploadField from "./form/ImageUploadField";
 import DynamicArrayInput from "./form/DynamicArrayInput";
+import { createEvent } from "@/lib/actions/event.actions";
 
 interface FormData {
   title: string;
@@ -148,22 +149,13 @@ export default function CreateEventForm() {
         formDataToSend.append("image", image);
       }
 
-      const response = await fetch("/api/events", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create event");
-      }
+      const createdEvent = await createEvent(formDataToSend);
 
       setSuccess(true);
-      setCreatedSlug(data.event.slug);
+      setCreatedSlug(createdEvent.slug);
 
       setTimeout(() => {
-        router.push(`/events/${data.event.slug}`);
+        router.push(`/events/${createdEvent.slug}`);
       }, 2000);
     } catch (error) {
       console.error("Error creating event:", error);
